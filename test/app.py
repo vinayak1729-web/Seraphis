@@ -365,6 +365,8 @@
 #     main()
 
 
+
+# credentials.json = {"installed":{"client_id":"815217031887-hgqt6f1egh6tdefboegpsghr6qeboutk.apps.googleusercontent.com","project_id":"calendardemo-466105","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"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","redirect_uris":["http://localhost"]}}
 import streamlit as st
 import json
 import os
