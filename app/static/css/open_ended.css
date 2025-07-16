@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #84e0ff 0%, #f7b0ff 100%);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+h1 {
+    color: white;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+    font-weight: 600;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+.progress-container {
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto 30px;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background-color: #edf2f7;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, #4481eb 0%, #04befe 100%);
+    transition: width 0.4s ease-in-out;
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #4a5568;
+}
+
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem 2rem 1rem 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+form {
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.question-container {
+    display: none;
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: all 0.5s ease;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+.question-container.active {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.question-container.exit {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.question-label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+    color: #033c41;
+    font-size: 1.1em;
+}
+
+input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    display: block;
+    margin-bottom: 10px;
+    border: 2px solid #00eeff;
+    border-radius: 8px;
+    border-color: #033c41;
+    font-size: 1.1em;
+    color: #ffffff;
+    background-color: rgba(96, 25, 134, 0.553);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #4481eb;
+    box-shadow: 0 0 8px rgba(68, 129, 235, 0.3);
+    outline: none;
+}
+
+input[type="text"]::placeholder {
+    color: white;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #4481eb 0%, #04befe 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(68, 129, 235, 0.2);
+}
+
+button:hover {
+    background: linear-gradient(90deg, #04befe 0%, #4481eb 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(68, 129, 235, 0.3);
+}
+
+.next-btn,
+.prev-btn {
+    padding: 10px;
+    width: auto;
+    min-width: 100px;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 20px;
+    width: 90%;
+}
+
+.navigation-buttons:only-child {
+    justify-content: flex-end;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+}
+
+footer img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+}
+
+footer span {
+    font-size: 0.9rem;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .header {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    .progress-container {
+        padding: 10px;
+    }
+
+    button {
+        padding: 12px;
+    }
+
+    .navigation-buttons {
+        width: 90%;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .next-btn,
+    .prev-btn {
+        min-width: 80px;
+        font-size: 14px;
+    }
+
+    footer {
+        padding: 10px 15px;
+    }
+}

@@ -1,0 +1,481 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #7b68ee;
+    --background-gradient-start: #e6f2ff;
+    --background-gradient-end: #f3e7ff;
+    --text-color-dark: #2c3e50;
+    --text-color-light: #ffffff;
+    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    --gradient-primary: linear-gradient(135deg, #a8e0ff 0%, #ffd1dc 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lora', sans-serif;
+    background: linear-gradient(135deg, var(--background-gradient-start) 0%, var(--background-gradient-end) 100%);
+    color: var(--text-color-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar Styles */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--card-shadow);
+    padding: 15px 0;
+    transition: all 0.3s ease;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-brand img.logo {
+    height: 40px;
+}
+
+.navbar-nav {
+    gap: 10px;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    color: var(--text-color-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: var(--gradient-primary);
+    color: var(--text-color-dark);
+    transform: translateY(-2px);
+}
+
+.nav-link i {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.user-section {
+    gap: 15px;
+}
+
+.welcome-text {
+    color: var(--text-color-dark);
+    font-weight: 500;
+}
+
+.btn-login,
+.btn-logout {
+    padding: 8px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-login {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-logout {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-login:hover,
+.btn-logout:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+    .navbar-nav {
+        padding: 20px 0;
+    }
+
+    .nav-link {
+        padding: 10px 15px;
+    }
+
+    .user-section {
+        margin-top: 15px;
+        justify-content: center;
+    }
+}
+
+/* Header Styles */
+header {
+    padding: 3rem 2rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    margin-bottom: 2rem;
+    border-radius: 0 0 30px 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    margin-top: 70px; /* Adjust for fixed navbar */
+}
+
+header h1 {
+    font-family: 'Lora', serif;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+    animation: fadeIn 0.8s ease;
+}
+
+/* Wellness Summary */
+.wellness-summary {
+    max-width: 800px;
+    margin: 3rem auto;
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.summary-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.summary-header h2 {
+    font-family: 'Lora', serif;
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+/* Rating Section */
+.rating-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.rating-section h3 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 0;
+}
+
+.rating label {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.rating label svg {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.rating label:hover {
+    transform: scale(1.1);
+}
+
+.rating-helper {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* Feedback Container */
+.feedback-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    animation: slideUp 0.8s ease;
+}
+
+.markdown-content {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.markdown-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.markdown-content p {
+    color: #34495e;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.markdown-content li {
+    margin-bottom: 0.5rem;
+    color: #34495e;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid #a8e0ff;
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    color: #5f6c7b;
+    font-style: italic;
+}
+
+/* Footer */
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+}
+
+footer img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+footer span {
+    font-size: 0.9rem;
+    color: var(--text-color-dark);
+    display: flex;
+    align-items: center;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes heartPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Rating Styling */
+.rating > label {
+    margin-right: 4px;
+}
+
+.rating:not(:checked) > input {
+    display: none;
+}
+
+.rating:not(:checked) > label {
+    float: right;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.rating:not(:checked) > label > svg {
+    fill: #666;
+    transition: fill 0.3s ease, transform 0.3s ease;
+}
+
+.rating > input:checked ~ label > svg {
+    fill: #ff0000;
+    transform: scale(1.1);
+}
+
+.rating:not(:checked) > label:hover ~ label > svg,
+.rating:not(:checked) > label:hover > svg {
+    fill: #ff1a1a;
+    transform: scale(1.05);
+}
+
+#heart1:checked ~ label > svg {
+    fill: #ff0000;
+}
+
+#heart2:checked ~ label > svg {
+    fill: #ff4d00;
+}
+
+#heart3:checked ~ label > svg {
+    fill: #ff9900;
+}
+
+#heart4:checked ~ label > svg {
+    fill: #ccff00;
+}
+
+#heart5:checked ~ label > svg {
+    fill: #66ff00;
+}
+
+#heart6:checked ~ label > svg {
+    fill: #00ff4d;
+}
+
+#heart7:checked ~ label > svg {
+    fill: #00ff99;
+}
+
+#heart8:checked ~ label > svg {
+    fill: #00ccff;
+}
+
+#heart9:checked ~ label > svg {
+    fill: #0059ff;
+}
+
+#heart10:checked ~ label > svg {
+    fill: #9900ff;
+}
+
+#heart1:hover ~ label > svg,
+#heart1:hover > svg {
+    fill: #e60000 !important;
+}
+
+#heart2:hover ~ label > svg,
+#heart2:hover > svg {
+    fill: #e66a00 !important;
+}
+
+#heart3:hover ~ label > svg,
+#heart3:hover > svg {
+    fill: #e6b600 !important;
+}
+
+#heart4:hover ~ label > svg,
+#heart4:hover > svg {
+    fill: #a6e600 !important;
+}
+
+#heart5:hover ~ label > svg,
+#heart5:hover > svg {
+    fill: #00e600 !important;
+}
+
+#heart6:hover ~ label > svg,
+#heart6:hover > svg {
+    fill: #00b3e6 !important;
+}
+
+#heart7:hover ~ label > svg,
+#heart7:hover > svg {
+    fill: #00e6b3 !important;
+}
+
+#heart8:hover ~ label > svg,
+#heart8:hover > svg {
+    fill: #00e6e6 !important;
+}
+
+#heart9:hover ~ label > svg,
+#heart9:hover > svg {
+    fill: #0066e6 !important;
+}
+
+#heart10:hover ~ label > svg,
+#heart10:hover > svg {
+    fill: #6600e6 !important;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    header {
+        padding: 2rem 1rem;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .markdown-content {
+        padding: 1.5rem;
+    }
+
+    .markdown-content p {
+        font-size: 1rem;
+    }
+
+    .wellness-summary {
+        margin: 2rem 1rem;
+        padding: 1.5rem;
+    }
+
+    .rating label svg {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .summary-header h2 {
+        font-size: 1.5rem;
+    }
+}

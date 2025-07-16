@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Close-ended Questionnaire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/closed_ended.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>📝 Close-ended Questionnaire</h1>
+        <p class="subtitle">✨ Please answer all questions honestly. Your responses will help us understand how to better support you. 💙</p>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="progress-text">
+            Progress: <span id="progress-percentage">0</span>% Complete 🌟
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="card">
+            <form class="assessment-form" action="{{ url_for('submit_close_ended') }}" method="POST">
+                {% for question in questions %}
+                <div class="question-container" data-question="{{ loop.index }}">
+                    <label class="question-label">❓ {{ question }}</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="{{ question }}" value="Yes" required onchange="handleOptionSelect()">
+                            <span>✅ Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="{{ question }}" value="No" required onchange="handleOptionSelect()">
+                            <span>❌ No</span>
+                        </label>
+                    </div>
+                    <div class="navigation-buttons">
+                        {% if not loop.first %}
+                        <button type="button" class="prev-btn" onclick="showPreviousQuestion()">⬅️ Previous</button>
+                        {% endif %}
+                        {% if loop.last %}
+                        <button type="submit" class="next-btn">Submit ✨</button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <img src="{{ url_for('static', filename='suryaprabha.jpeg') }}" alt="Logo">
+        <span>🌍 Made with ❤️ by Team Surya Prabha ☀️</span>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/closed_ended.js') }}"></script>
+</body>
+</html>

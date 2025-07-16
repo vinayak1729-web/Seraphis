@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chikitsa - Cognitive Health Intelligence Platform</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    <!-- Floating Bubbles -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container text-center">
+            <img src="{{ url_for('static', filename='chikitsa.png') }}" alt="CHIKITSA" class="brand-logo mb-4" height="80">
+            <h1 class="hero-title">Welcome to Chikitsa 🌟</h1>
+            <p class="hero-subtitle">
+                <strong>C</strong>ognitive <strong>H</strong>ealth <strong>I</strong>ntelligence
+                <strong>K</strong>nowledge with
+                <strong>I</strong>nteractive <strong>T</strong>reatment <strong>S</strong>upport from
+                <strong>A</strong>I
+            </p>
+            <div class="cta-buttons">
+                <a href="/register" class="btn btn-primary btn-lg mx-2">Get Started </a>
+                <a href="/login" class="btn btn-outline-primary btn-lg mx-2">Sign In </a>
+            </div>
+        </div>
+    </div>
+    <!-- Tutorial Button -->
+    <div class="tutorial-trigger" id="tutorialTrigger">
+        <i class="fas fa-question-circle fa-2x"></i>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-box">
+            <span class="tutorial-close">×</span>
+            <div class="tutorial-content">
+                <div id="tutorialIcon"></div>
+                <h3 id="tutorialTitle"></h3>
+                <p id="tutorialContent"></p>
+            </div>
+            <div class="tutorial-navigation">
+                <button id="tutorialPrev" class="tutorial-btn">Previous</button>
+                <button id="tutorialNext" class="tutorial-btn">Next</button>
+            </div>
+            <div class="tutorial-progress"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-center">
+                <img src="{{ url_for('static', filename='suryaprabha.jpeg') }}" alt="Team Logo" class="footer-logo">
+                <span>Crafted with 💖 by Team Surya Prabha</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>

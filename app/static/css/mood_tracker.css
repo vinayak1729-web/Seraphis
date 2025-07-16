@@ -1,0 +1,123 @@
+:root {
+    --gradient-primary: linear-gradient(135deg, #a8e0ff 0%, #ffd1dc 100%);
+    --primary-color: #4a90e2; /* Added for consistency with other files */
+    --text-dark: #2c3e50; /* Added for consistency with other files */
+    --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.05); /* Added for consistency */
+}
+
+body {
+    font-family: 'Lora', serif;
+    background: linear-gradient(135deg, #e0f7fa 0%, #f3e5f5 100%);
+    min-height: 100vh;
+}
+
+.mood-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 20px 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.mood-btn {
+    font-size: 2rem;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.mood-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Navbar Styles */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow-soft);
+    padding: 15px 0;
+    transition: all 0.3s ease;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-brand img.logo {
+    height: 40px;
+}
+
+.navbar-nav {
+    gap: 10px;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: var(--gradient-primary);
+    color: var(--text-dark);
+    transform: translateY(-2px);
+}
+
+.nav-link i {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.user-section {
+    gap: 15px;
+}
+
+.welcome-text {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.btn-login,
+.btn-logout {
+    padding: 8px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-login {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-logout {
+    background: var(--primary-color); /* Adjusted to use primary-color for consistency */
+    color: white;
+}
+
+.btn-login:hover,
+.btn-logout:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991px) {
+    .navbar-nav {
+        padding: 20px 0;
+    }
+
+    .nav-link {
+        padding: 10px 15px;
+    }
+}

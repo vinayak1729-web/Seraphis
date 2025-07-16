@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/open_ended.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1 style="font-size: 40px;">📝 Open-ended Questionnaire</h1>
+        <p class="subtitle">✨ Please answer all questions honestly. Your responses will help us understand how to better support you. 💙.</p>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="progress-text">
+            Progress: <span id="progress-percentage">0%</span> Complete 🌟
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="card">
+            <form action="{{ url_for('submit_opended') }}" method="POST">
+                {% for question in questions %}
+                <div class="question-container" data-question="{{ loop.index }}">
+                    <label class="question-label">👀 {{ question }}</label><br>
+                    <input type="text" name="{{ question }}" placeholder="Enter in complete sentence" required>
+                    <div class="navigation-buttons">
+                        {% if not loop.first %}
+                        <button type="button" class="prev-btn" onclick="showPreviousQuestion()">⬅️ Previous</button>
+                        {% endif %}
+                        {% if loop.last %}
+                        <button type="submit" class="next-btn">Submit ✨</button>
+                        {% else %}
+                        <button type="button" class="next-btn" onclick="handleNextQuestion()">Next ➡️</button>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <img src="{{ url_for('static', filename='suryaprabha.jpeg') }}" alt="Logo">
+        <span>Made with Gemini, by Team Surya Prabha</span>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/open_ended.js') }}"></script>
+</body>
+</html>
