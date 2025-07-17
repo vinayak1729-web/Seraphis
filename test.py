@@ -20,10 +20,11 @@ import asyncio
 import platform
 
 # Import the ai_service module (adjust the import path based on your structure)
+import asyncio
+import platform
 from app.services.ai_service import gemma3n_e2b_chat
 
 async def test_gemma3n_e2b_chat():
-    """Test the Gemma 3n:e2b chat function with a sample prompt"""
     print("Starting Gemma 3n:e2b chat test...")
     await gemma3n_e2b_chat("hey")
     print("Test completed.")
