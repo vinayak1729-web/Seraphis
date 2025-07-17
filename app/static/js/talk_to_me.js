@@ -79,3 +79,23 @@ document.addEventListener('DOMContentLoaded', () => {
         orb.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
     });
 });
+
+    // Toggle glass container wiggle, Saturn rings, and moon speed on voice button click
+        const voiceBtn = document.querySelector('.voice-btn');
+        const container = document.querySelector('.voice-assistant-container');
+        const saturnRings = document.querySelector('.saturn-rings');
+        const moon = document.querySelector('.moon');
+
+        voiceBtn.addEventListener('click', () => {
+            // Start glass container wiggle, Saturn rings, and fast moon
+            container.classList.add('wiggle');
+            saturnRings.classList.add('active');
+            moon.classList.add('fast');
+
+            // Simulate Gemini response after 3 seconds
+            setTimeout(() => {
+                container.classList.remove('wiggle');
+                saturnRings.classList.remove('active');
+                moon.classList.remove('fast');
+            }, 3000);
+        });

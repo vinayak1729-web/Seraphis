@@ -1,24 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --healing-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-light: rgba(255, 255, 255, 0.9);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.15);
+    --border-radius: 20px;
+    --transition: all 0.3s ease;
+}
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #84e0ff 0%, #f59eff 100%);
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-attachment: fixed;
     color: #333;
     margin: 0;
     padding: 20px;
     min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    z-index: -1;
 }
 
 .header {
     text-align: center;
     margin-bottom: 30px;
-    padding: 20px;
+    padding: 2rem;
 }
 
 h1 {
-    color: white;
+    font-family: 'Playfair Display', serif;
+    color: var(--text-light);
     margin-bottom: 10px;
-    font-size: 2.5em;
+    font-size: clamp(2.5rem, 6vw, 4rem);
     font-weight: 600;
 }
 
@@ -33,13 +65,17 @@ h1 {
     max-width: 600px;
     margin: 0 auto 20px;
     padding: 20px;
-    border-radius: 12px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
 }
 
 .progress-bar {
     width: 100%;
     height: 20px;
-    background-color: #edf2f7;
+    background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
     overflow: hidden;
 }
@@ -47,7 +83,7 @@ h1 {
 .progress {
     width: 0%;
     height: 100%;
-    background: linear-gradient(90deg, #4481eb 0%, #04befe 100%);
+    background: var(--primary-gradient);
     transition: width 0.4s ease-in-out;
 }
 
@@ -55,7 +91,7 @@ h1 {
     text-align: center;
     margin-top: 8px;
     font-size: 14px;
-    color: #4a5568;
+    color: var(--text-light);
 }
 
 .main-content {
@@ -67,14 +103,21 @@ h1 {
 }
 
 .card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2rem 2rem 1rem 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
 }
 
 form {
@@ -89,8 +132,10 @@ form {
     transform: translateX(-100%);
     margin-bottom: 15px;
     padding: 15px 15px 5px 15px;
-    border-bottom: 1px solid #edf2f7;
+    border-bottom: 1px solid var(--glass-border);
     transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
 }
 
 .question-container.active {
@@ -108,7 +153,7 @@ form {
     font-weight: 600;
     display: block;
     margin-bottom: 12px;
-    color: #0c071a;
+    color: var(--text-light);
 }
 
 .radio-group {
@@ -124,11 +169,12 @@ form {
     cursor: pointer;
     padding: 8px 12px;
     border-radius: 6px;
-    transition: background-color 0.2s;
+    background: rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
 }
 
 .radio-option:hover {
-    background-color: #f0f4f8;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .radio-option input[type="radio"] {
@@ -137,33 +183,31 @@ form {
 }
 
 button {
-    display: block;
     width: 100%;
-    padding: 14px;
-    background: linear-gradient(90deg, #4481eb 0%, #04befe 100%);
+    padding: 0.7rem 1.5rem;
+    background: var(--primary-gradient);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 25px;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(68, 129, 235, 0.2);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
 }
 
 button:hover {
-    background: linear-gradient(90deg, #04befe 0%, #4481eb 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(68, 129, 235, 0.3);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
 }
 
 .prev-btn {
-    background: linear-gradient(90deg, #04befe 0%, #4481eb 100%);
+    background: var(--accent-gradient);
     flex: 1;
 }
 
 .next-btn {
-    background: linear-gradient(90deg, #4481eb 0%, #04befe 100%);
+    background: var(--primary-gradient);
     flex: 2;
 }
 
@@ -179,8 +223,8 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
     padding: 1rem;
     width: 100%;
     position: fixed;
@@ -200,7 +244,7 @@ footer img {
 
 footer span {
     font-size: 0.9rem;
-    color: #4a5568;
+    color: var(--text-light);
     display: flex;
     align-items: center;
 }
@@ -231,4 +275,13 @@ footer span {
     footer {
         padding: 10px 15px;
     }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.question-container.active {
+    animation: fadeInUp 0.6s ease forwards;
 }

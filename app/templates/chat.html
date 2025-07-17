@@ -3,103 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chikitsa Chat Interface</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <!-- Custom CSS -->
+    <title>Seraphis AI - Your Divine Healing Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="{{ url_for('static', filename='chikitsa.png') }}" alt="CHIKITSA Logo" class="logo">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('chat') }}">
-                            <i class="fas fa-comments"></i>
-                            <span>Consultation</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('talk_to_me') }}">
-                            <i class="fas fa-microphone"></i>
-                            <span>Voice Support</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('image_analysis') }}">
-                            <i class="fas fa-image"></i>
-                            <span>Image analysis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('personal_info') }}">
-                            <i class="fas fa-user"></i>
-                            <span>Profile</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('home') }}">
-                            <i class="fas fa-home"></i>
-                            <span>Home</span>
-                        </a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center user-section">
-                    {% if session.username %}
-                    <span class="welcome-text">Welcome, {{ session.username }}</span>
-                    <a href="{{ url_for('logout') }}" class="btn btn-logout">Sign Out</a>
-                    {% else %}
-                    <a class="btn btn-login" href="{{ url_for('login') }}">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </a>
-                    {% endif %}
-                </div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-container">
+                <a href="/home" class="logo">SERAPHIS</a>
+            </div>
+            <ul class="nav-links">
+                <li><a  class="nav-link" href="{{ url_for('ai.chat') }}">Consultation</a></li>
+                <li><a class="nav-link" href="{{ url_for('ai.talk_to_me') }}">Voice Support</a></li>
+                <li><a  class="nav-link" href="{{ url_for('ai.image_analysis') }}">Analysis</a></li>
+                <li><a  class="nav-link" href="{{ url_for('user.close_ended') }}">Wellness</a></li>
+                <li><a  class="nav-link" href="{{ url_for('user.personal_info') }}">Profile</a></li>
+            </ul>
+            <div class="auth-buttons">
+                {% if session.username %}
+                <span class="welcome-text">Welcome, {{ session.username }}</span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-glass">Sign Out</a>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-glass"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
+                {% endif %}
             </div>
         </div>
     </nav>
-    <br><br>
-    <div class="container">
+    <br><br><br><br><br>
+    <div class="chat-container">
         <div class="chat-header">
-            <div class="logo">
-                <div class="logo-orb"></div>
-                <h1>Chikitsa</h1>
+            <div class="bot-avatar">✨</div>
+            <div class="bot-info">
+                <h2>Seraphis AI</h2>
+                <div class="bot-status">
+                    <div class="status-dot"></div>
+                    <span>Online • Ready to heal</span>
+                </div>
             </div>
-            <div class="settings-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24">
-                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
-                </svg>
+            <div class="mood-indicator" id="moodIndicator">
+                <span id="moodText">Mood: Calm</span>
             </div>
         </div>
 
-        <div class="chat-container" id="chatContainer">
+        <div class="chat-messages" id="chatMessages">
             <div class="welcome-message">
-                <div class="welcome-orb"></div>
-                <p>Hello! I'm Chikitsa. How can I assist you today?</p>
+                <h3>✨ Welcome to Divine Healing</h3>
+                <p>I'm Seraphis AI, your compassionate healing companion. I'm here to listen, understand, and guide you on your journey to mental wellness. How are you feeling today?</p>
             </div>
         </div>
 
-        <div class="input-container">
-            <input type="text" id="userInput" placeholder="Type your message...">
-            <button class="send-button" id="sendButton">
-                <svg width="24" height="24" viewBox="0 0 24 24">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                </svg>
-            </button>
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+            <div class="ai-thinking">
+                <i class="fas fa-brain thinking-icon"></i>
+                <span>Seraphis is thinking...</span>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="quick-suggestions" id="quickSuggestions">
+                <div class="suggestion-chip" data-text="I'm feeling anxious today">I'm feeling anxious today</div>
+                <div class="suggestion-chip" data-text="Help me with breathing exercises">Help me with breathing exercises</div>
+                <div class="suggestion-chip" data-text="I need someone to talk to">I need someone to talk to</div>
+                <div class="suggestion-chip" data-text="I'm having trouble sleeping">I'm having trouble sleeping</div>
+            </div>
+            <div class="chat-input-wrapper">
+                <textarea 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="Share your thoughts with Seraphis..."
+                    rows="1"
+                ></textarea>
+                <div class="input-actions">
+                    <button class="voice-button" id="voiceButton" title="Voice input">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="send-button" id="sendButton" title="Send message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    <script>
+        class SerphisChatbot {
+            constructor() {
+                this.chatMessages = document.getElementById('chatMessages');
+                this.chatInput = document.getElementById('chatInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.voiceButton = document.getElementById('voiceButton');
+                this.typingIndicator = document.getElementById('typingIndicator');
+                this.quickSuggestions = document.getElementById('quickSuggestions');
+                this.moodIndicator = document.getElementById('moodIndicator');
+                this.moodText = document.getElementById('moodText');
+                
+                this.isTyping = false;
+                this.isRecording = false;
+                this.currentMood = 'calm';
+                
+                this.init();
+            }
+
+            init() {
+                this.sendButton.addEventListener('click', () => this.handleSend());
+                this.chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.handleSend();
+                    }
+                });
+                
+                this.voiceButton.addEventListener('click', () => this.handleVoiceInput());
+                
+                // Auto-resize textarea
+                this.chatInput.addEventListener('input', () => {
+                    this.chatInput.style.height = 'auto';
+                    this.chatInput.style.height = this.chatInput.scrollHeight + 'px';
+                });
+
+                // Quick suggestions
+                this.quickSuggestions.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('suggestion-chip')) {
+                        this.chatInput.value = e.target.dataset.text;
+                        this.handleSend();
+                    }
+                });
+
+                // Initial mood detection
+                this.updateMood('calm');
+            }
+
+            async handleSend() {
+                const message = this.chatInput.value.trim();
+                if (!message) return;
+
+                this.addMessage(message, 'user');
+                this.chatInput.value = '';
+                this.chatInput.style.height = 'auto';
+                
+                // Hide suggestions after first message
+                this.quickSuggestions.style.display = 'none';
+                
+                // Analyze mood from message
+                this.analyzeMood(message);
+                
+                // Show typing indicator
+                this.showTyping();
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    this.hideTyping();
+                    const response = this.generateResponse(message);
+                    this.addMessage(response, 'bot');
+                }, 2000 + Math.random() * 1000);
+            }
+
+            addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                
+                const messageContent = document.createElement('div');
+                messageContent.textContent = text;
+                
+                const messageTime = document.createElement('div');
+                messageTime.className = 'message-time';
+                messageTime.textContent = new Date().toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                messageDiv.appendChild(messageContent);
+                messageDiv.appendChild(messageTime);
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+
+            showTyping() {
+                this.isTyping = true;
+                this.typingIndicator.style.display = 'block';
+                this.scrollToBottom();
+            }
+
+            hideTyping() {
+                this.isTyping = false;
+                this.typingIndicator.style.display = 'none';
+            }
+
+            scrollToBottom() {
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+
+            generateResponse(message) {
+                const responses = {
+                    anxiety: [
+                        "I understand you're feeling anxious. Let's take a deep breath together. Try the 4-7-8 breathing technique: breathe in for 4, hold for 7, exhale for 8. 🌸",
+                        "Anxiety can feel overwhelming, but you're not alone. What's one small thing that usually brings you comfort? Let's focus on that together. 💙",
+                        "I hear you. Anxiety is your mind's way of trying to protect you. Let's work through this gently. Can you tell me what's troubling you most right now? 🤗"
+                    ],
+                    sad: [
+                        "I'm here with you in this difficult moment. It's okay to feel sad - these emotions are valid and temporary. What would help you feel a little lighter right now? 🌙",
+                        "Sadness can feel heavy, but you're stronger than you know. Would you like to talk about what's weighing on your heart? I'm here to listen. 💜",
+                        "Thank you for trusting me with your feelings. Sometimes just acknowledging our sadness is the first step toward healing. How can I support you today? 🌻"
+                    ],
+                    stress: [
+                        "Stress can feel overwhelming, but we can work through this together. Let's try a quick grounding exercise: name 5 things you can see, 4 you can touch, 3 you can hear. 🍃",
+                        "I can sense you're under pressure. Remember, you don't have to carry everything at once. What's one thing we can tackle together right now? 🌟",
+                        "Stress is your body's response to challenges. Let's create a small pocket of calm. Would you like to try a brief meditation or talk about what's stressing you? 🧘‍♀️"
+                    ],
+                    happy: [
+                        "I love hearing the joy in your message! It's wonderful that you're feeling good. What brought this happiness to you today? Let's celebrate it together! 🌈",
+                        "Your positive energy is beautiful! It's so important to acknowledge and savor these good moments. How can we make this feeling last a little longer? ✨",
+                        "I'm so glad you're feeling happy! These moments of joy are precious gifts. Would you like to share what's bringing you this wonderful feeling? 🎉"
+                    ],
+                    sleep: [
+                        "Sleep troubles can be frustrating. Let's create a peaceful transition to rest. Try this: dim the lights, put away screens, and focus on slow, deep breaths. 🌙",
+                        "Good sleep is essential for healing. Have you tried progressive muscle relaxation? Starting from your toes, tense and release each muscle group. 😴",
+                        "I understand how exhausting sleep problems can be. Let's work on a calming bedtime routine. What usually helps you feel most relaxed? 💤"
+                    ],
+                    default: [
+                        "Thank you for sharing that with me. I'm here to listen and support you through whatever you're experiencing. How can I help you feel better today? 🤗",
+                        "I appreciate you opening up to me. Your feelings matter, and I want to understand how I can best support you. What would be most helpful right now? 💙",
+                        "I'm glad you're here. Sometimes just having someone to talk to can make a difference. What's on your mind that I can help you work through? 🌸"
+                    ]
+                };
+
+                const lowerMessage = message.toLowerCase();
+                let category = 'default';
+
+                if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried') || lowerMessage.includes('nervous')) {
+                    category = 'anxiety';
+                } else if (lowerMessage.includes('sad') || lowerMessage.includes('depressed') || lowerMessage.includes('down') || lowerMessage.includes('low')) {
+                    category = 'sad';
+                } else if (lowerMessage.includes('stress') || lowerMessage.includes('overwhelmed') || lowerMessage.includes('pressure') || lowerMessage.includes('tired')) {
+                    category = 'stress';
+                } else if (lowerMessage.includes('happy') || lowerMessage.includes('good') || lowerMessage.includes('great') || lowerMessage.includes('joy')) {
+                    category = 'happy';
+                } else if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('tired') || lowerMessage.includes('rest')) {
+                    category = 'sleep';
+                }
+
+                const categoryResponses = responses[category];
+                return categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
+            }
+
+            analyzeMood(message) {
+                const lowerMessage = message.toLowerCase();
+                let mood = 'calm';
+
+                if (lowerMessage.includes('anxious') || lowerMessage.includes('worried') || lowerMessage.includes('nervous')) {
+                    mood = 'anxious';
+                } else if (lowerMessage.includes('sad') || lowerMessage.includes('depressed') || lowerMessage.includes('down')) {
+                    mood = 'sad';
+                } else if (lowerMessage.includes('angry') || lowerMessage.includes('frustrated') || lowerMessage.includes('mad')) {
+                    mood = 'frustrated';
+                } else if (lowerMessage.includes('happy') || lowerMessage.includes('good') || lowerMessage.includes('great') || lowerMessage.includes('joy')) {
+                    mood = 'happy';
+                } else if (lowerMessage.includes('stress') || lowerMessage.includes('overwhelmed')) {
+                    mood = 'stressed';
+                }
+
+                this.updateMood(mood);
+            }
+
+            updateMood(mood) {
+                this.currentMood = mood;
+                const moodEmojis = {
+                    calm: '😌',
+                    anxious: '😰',
+                    sad: '😢',
+                    frustrated: '😤',
+                    happy: '😊',
+                    stressed: '😵'
+                };
+
+                this.moodText.textContent = `Mood: ${mood.charAt(0).toUpperCase() + mood.slice(1)} ${moodEmojis[mood]}`;
+                this.moodIndicator.classList.add('show');
+                
+                setTimeout(() => {
+                    this.moodIndicator.classList.remove('show');
+                }, 3000);
+            }
+
+            handleVoiceInput() {
+                if (this.isRecording) {
+                    this.stopRecording();
+                } else {
+                    this.startRecording();
+                }
+            }
+
+            startRecording() {
+                this.isRecording = true;
+                this.voiceButton.classList.add('recording');
+                this.voiceButton.innerHTML = '<i class="fas fa-stop"></i>';
+                
+                // Simulate voice recording
+                setTimeout(() => {
+                    this.stopRecording();
+                    this.chatInput.value = "I'm feeling a bit anxious today and could use some support.";
+                }, 3000);
+            }
+
+            stopRecording() {
+                this.isRecording = false;
+                this.voiceButton.classList.remove('recording');
+                this.voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+            }
+        }
+
+        // Initialize the chatbot when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SerphisChatbot();
+        });
+    </script>
 </body>
 </html>

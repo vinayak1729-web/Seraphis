@@ -23,31 +23,31 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('chat') }}">
+                        <a class="nav-link" href="{{ url_for('ai.chat') }}">
                             <i class="fas fa-comments"></i>
                             <span>Consultation</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('talk_to_me') }}">
+                        <a class="nav-link" href="{{ url_for('ai.talk_to_me') }}">
                             <i class="fas fa-microphone"></i>
                             <span>Voice Support</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('image_analysis') }}">
+                        <a class="nav-link" href="{{ url_for('ai.image_analysis') }}">
                             <i class="fas fa-image"></i>
                             <span>Image analysis</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('home') }}">
+                        <a class="nav-link" href="{{ url_for('user.home') }}">
                             <i class="fas fa-home"></i>
                             <span>Home</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('personal_info') }}">
+                        <a class="nav-link" href="{{ url_for('user.personal_info') }}">
                             <i class="fas fa-user"></i>
                             <span>Profile</span>
                         </a>
@@ -56,9 +56,9 @@
                 <div class="d-flex align-items-center user-section">
                     {% if session.username %}
                     <span class="welcome-text">Welcome, {{ session.username }}</span>
-                    <a href="{{ url_for('logout') }}" class="btn btn-logout">Sign Out</a>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-logout">Sign Out</a>
                     {% else %}
-                    <a class="btn btn-login" href="{{ url_for('login') }}">
+                    <a class="btn btn-login" href="{{ url_for('auth.login') }}">
                         <i class="fas fa-sign-in-alt"></i> Sign In
                     </a>
                     {% endif %}

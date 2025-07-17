@@ -28,13 +28,13 @@ def create_app():
     from app.routes.admin import admin_bp
     from app.routes.doctor import doctor_bp
 
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(appointment_bp)
     app.register_blueprint(ai_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(doctor_bp)
-
     # Error handlers
     @app.errorhandler(404)
     def not_found_error(error):

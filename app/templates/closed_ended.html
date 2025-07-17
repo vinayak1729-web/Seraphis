@@ -26,7 +26,7 @@
 
     <div class="main-content">
         <div class="card">
-            <form class="assessment-form" action="{{ url_for('submit_close_ended') }}" method="POST">
+            <form class="assessment-form" action="{{ url_for('user.submit_close_ended') }}" method="POST">
                 {% for question in questions %}
                 <div class="question-container" data-question="{{ loop.index }}">
                     <label class="question-label">❓ {{ question }}</label>

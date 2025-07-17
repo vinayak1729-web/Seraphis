@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, Response, session, redirect
 from app.services.ai_service import gemini_chat, analyze_image, detect_emotion_and_attention
 from app.utils.decorators import login_required
-
+import cv2
 ai_bp = Blueprint('ai', __name__)
 
 attention_status = "Not Paying Attention"
@@ -51,19 +51,19 @@ def talk_to_me():
 
     return "Unsupported request method", 405
 
-@ai_bp.route('/video_feed')
-def video_feed():
-    def generate_frames():
-        cap = cv2.VideoCapture(0)
-        global attention_status, dominant_emotion
-        while True:
-            success, frame = cap.read()
-            if not success:
-                break
-            processed_frame, attention_status, dominant_emotion = detect_emotion_and_attention(frame, attention_status, dominant_emotion)
-            _, buffer = cv2.imencode('.jpg', processed_frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-        cap.release()
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+# @ai_bp.route('/video_feed')
+# def video_feed():
+#     def generate_frames():
+#         cap = cv2.VideoCapture(0)
+#         global attention_status, dominant_emotion
+#         while True:
+#             success, frame = cap.read()
+#             if not success:
+#                 break
+#             processed_frame, attention_status, dominant_emotion = detect_emotion_and_attention(frame, attention_status, dominant_emotion)
+#             _, buffer = cv2.imencode('.jpg', processed_frame)
+#             frame = buffer.tobytes()
+#             yield (b'--frame\r\n'
+#                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+#         cap.release()
+#     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')

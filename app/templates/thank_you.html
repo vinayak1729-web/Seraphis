@@ -23,73 +23,31 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/thank_you.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="{{ url_for('static', filename='chikitsa.png') }}" alt="CHIKITSA Logo" class="logo">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('chat') }}">
-                            <i class="fas fa-comments"></i>
-                            <span>Consultation</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('talk_to_me') }}">
-                            <i class="fas fa-microphone"></i>
-                            <span>Voice Support</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('image_analysis') }}">
-                            <i class="fas fa-image"></i>
-                            <span>Image analysis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/closed_ended">
-                            <i class="fas fa-star"></i>
-                            <span>Wellness Path</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('mood_tracker') }}">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Emotion Analytics</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/meditation">
-                            <i class="fas fa-spa"></i>
-                            <span>Meditate</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('personal_info') }}">
-                            <i class="fas fa-user"></i>
-                            <span>Profile</span>
-                        </a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center user-section">
-                    {% if session.username %}
-                    <span class="welcome-text">Welcome, {{ session.username }}</span>
-                    <a href="{{ url_for('logout') }}" class="btn btn-logout">Sign Out</a>
-                    {% else %}
-                    <a class="btn btn-login" href="{{ url_for('login') }}">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </a>
-                    {% endif %}
-                </div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-container">
+                <a href="/home" class="logo">SERAPHIS</a>
+            </div>
+            <ul class="nav-links">
+                <li><a  class="nav-link" href="{{ url_for('ai.chat') }}">Consultation</a></li>
+                <li><a class="nav-link" href="{{ url_for('ai.talk_to_me') }}">Voice Support</a></li>
+                <li><a  class="nav-link" href="{{ url_for('ai.image_analysis') }}">Analysis</a></li>
+                <li><a  class="nav-link" href="{{ url_for('user.close_ended') }}">Wellness</a></li>
+                <li><a  class="nav-link" href="{{ url_for('user.personal_info') }}">Profile</a></li>
+            </ul>
+            <div class="auth-buttons">
+                {% if session.username %}
+                <span class="welcome-text">Welcome, {{ session.username }}</span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-glass">Sign Out</a>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-glass"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
+                {% endif %}
             </div>
         </div>
     </nav>
-
+    <br><br><br><br><br>
+    
     <br><br>
     <div class="wellness-summary">
         <div class="summary-header">

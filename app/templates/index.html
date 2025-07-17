@@ -1,19 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Chikitsa - Cognitive Health Intelligence Platform</title>
+    <title>Seraphis - Healing Intelligence Platform</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Fonts and Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #5b86e5 0%, #36d1dc 100%);
+            --secondary-gradient: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            --accent-gradient: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+            --healing-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --text-dark: #1a1a1a;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            --shadow-hover: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            position: relative;
+            overflow-x: hidden;
+            color: var(--text-dark);
+            scroll-behavior: smooth;
+        }
+
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-brand::after {
+            content: '✨';
+            position: absolute;
+            animation: sparkle 1.5s infinite ease-in-out;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+            50% { transform: scale(1.3) rotate(180deg); opacity: 1; }
+        }
+
+        .nav-link {
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .hero-section {
+            padding: 10rem 0 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: var(--healing-gradient);
+            border-radius: 0 0 50px 50px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 5vw, 5rem);
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            color: var(--text-dark);
+            animation: fadeInUp 1.2s ease forwards;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-outline-primary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(15px);
+            color: var(--text-dark);
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow);
+        }
+
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .bubble {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            animation: float 12s infinite ease-in-out;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .bubble:nth-child(1) { width: 120px; height: 120px; left: 15%; bottom: -120px; animation-delay: 0s; }
+        .bubble:nth-child(2) { width: 180px; height: 180px; left: 35%; bottom: -180px; animation-delay: 4s; }
+        .bubble:nth-child(3) { width: 100px; height: 100px; left: 65%; bottom: -100px; animation-delay: 8s; }
+        .bubble:nth-child(4) { width: 140px; height: 140px; left: 85%; bottom: -140px; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 0.6; }
+            50% { transform: translateY(-50vh) scale(1.1); opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+
+        .tutorial-trigger {
+            position: fixed;
+            bottom: 2.5rem;
+            right: 2.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            padding: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .tutorial-trigger:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .tutorial-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+  height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tutorial-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 2.5rem;
+            max-width: 550px;
+            margin: 1.5rem;
+            position: relative;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tutorial-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            transition: transform 0.3s ease;
+        }
+
+        .tutorial-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .tutorial-btn {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            color: #ffffff;
+            font-weight: 500;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .tutorial-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        footer {
+            padding: 3rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .footer-logo {
+            height: 50px;
+            margin-right: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-logo:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: clamp(2.5rem, 4vw, 3.5rem); }
+            .hero-section { padding: 7rem 0 3rem; border-radius: 0 0 30px 30px; }
+            .nav-link { display: none; }
+            .btn-primary, .btn-outline-primary { padding: 0.9rem 2rem; font-size: 1.1rem; }
+            .tutorial-box { max-width: 90%; }
+            .tutorial-trigger { bottom: 1.5rem; right: 1.5rem; }
+        }
+    </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">SERAPHIS</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <!-- Floating Bubbles -->
     <div class="bubbles">
         <div class="bubble"></div>
@@ -25,20 +329,20 @@
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="container text-center">
-            <img src="{{ url_for('static', filename='chikitsa.png') }}" alt="CHIKITSA" class="brand-logo mb-4" height="80">
-            <h1 class="hero-title">Welcome to Chikitsa 🌟</h1>
+            <h1 class="hero-title">Welcome to Seraphis ✨</h1>
             <p class="hero-subtitle">
-                <strong>C</strong>ognitive <strong>H</strong>ealth <strong>I</strong>ntelligence
-                <strong>K</strong>nowledge with
-                <strong>I</strong>nteractive <strong>T</strong>reatment <strong>S</strong>upport from
-                <strong>A</strong>I
+                <strong>S</strong>erene <strong>E</strong>nhanced <strong>R</strong>esponsive
+                <strong>A</strong>rtificial <strong>P</strong>ower for
+                <strong>H</strong>ealing <strong>I</strong>ntelligence and
+                <strong>S</strong>upport
             </p>
             <div class="cta-buttons">
-                <a href="/register" class="btn btn-primary btn-lg mx-2">Get Started </a>
-                <a href="/login" class="btn btn-outline-primary btn-lg mx-2">Sign In </a>
+                <a href="/register" class="btn btn-primary btn-lg mx-2">Get Started <i class="fas fa-arrow-right ms-2"></i></a>
+                <a href="/login" class="btn btn-outline-primary btn-lg mx-2">Sign In <i class="fas fa-sign-in-alt ms-2"></i></a>
             </div>
         </div>
     </div>
+
     <!-- Tutorial Button -->
     <div class="tutorial-trigger" id="tutorialTrigger">
         <i class="fas fa-question-circle fa-2x"></i>
@@ -65,8 +369,8 @@
     <footer>
         <div class="container">
             <div class="d-flex align-items-center justify-content-center">
-                <img src="{{ url_for('static', filename='suryaprabha.jpeg') }}" alt="Team Logo" class="footer-logo">
-                <span>Crafted with 💖 by Team Surya Prabha</span>
+                <img src="{{ url_for('static', filename='seraphis-logo.png') }}" alt="Seraphis Logo" class="footer-logo">
+                <span>Crafted with 💖 by Team Seraphis</span>
             </div>
         </div>
     </footer>

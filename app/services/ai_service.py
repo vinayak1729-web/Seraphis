@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
-from fer import FER
+#from fer import FER
 import cv2
 import json
 
@@ -22,7 +22,7 @@ model = genai.GenerativeModel(
 )
 chat_session = model.start_chat()
 
-emotion_detector = FER(mtcnn=True)
+#emotion_detector = FER(mtcnn=True)
 
 def gemini_chat(user_input, history_file="dataset/intents.json"):
     try:
@@ -61,7 +61,7 @@ def analyze_image(image_data):
 
 def detect_emotion_and_attention(frame, attention_status, dominant_emotion):
     display_frame = cv2.flip(frame.copy(), 1)
-    results = emotion_detector.detect_emotions(frame)
+    results = 0 #emotion_detector.detect_emotions(frame)
 
     for result in results:
         bounding_box = result["box"]
