@@ -19,18 +19,17 @@
 import asyncio
 import platform
 
-# Import the ai_service module (adjust the import path based on your structure)
-import asyncio
-import platform
-from app.services.ai_service import gemma3n_e2b_chat
+# Import the chat module (adjust the import path based on your structure)
+from app.services.ai_service import chat
 
-async def test_gemma3n_e2b_chat():
-    print("Starting Gemma 3n:e2b chat test...")
-    await gemma3n_e2b_chat("hey")
+async def test_gemma3n_chat():
+    """Test the Gemma3n chat function with a sample prompt"""
+    print("Starting Gemma3n chat test...")
+    await chat(input("enter :"), model="gemma3n")
     print("Test completed.")
 
 if platform.system() == "Emscripten":
-    asyncio.ensure_future(test_gemma3n_e2b_chat())
+    asyncio.ensure_future(test_gemma3n_chat())
 else:
     if __name__ == "__main__":
-        asyncio.run(test_gemma3n_e2b_chat())
+        asyncio.run(test_gemma3n_chat())
