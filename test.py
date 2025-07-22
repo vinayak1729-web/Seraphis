@@ -20,12 +20,12 @@ import asyncio
 import platform
 
 # Import the chat module (adjust the import path based on your structure)
-from app.services.ai_service import chat
+from app.services.ai_service import stream_gemini_response,stream_gemma3n_response
 
 async def test_gemma3n_chat():
     """Test the Gemma3n chat function with a sample prompt"""
     print("Starting Gemma3n chat test...")
-    await chat(input("enter :"), model="gemma3n")
+    await stream_gemma3n_response(input("enter :"))
     print("Test completed.")
 
 if platform.system() == "Emscripten":

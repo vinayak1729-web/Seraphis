@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultation</title>
+</head>
+<body>
+    <h1>Consultation</h1>
+    <form id="consultation-form" enctype="multipart/form-data" method="POST" action="{{ url_for('send_message') }}">
+        <input type="text" name="message" placeholder="Enter your message">
+        <input type="file" name="files" multiple>
+        <button type="submit">Send</button>
+    </form>
+    <div id="response"></div>
+    <script>
+        const eventSource = new EventSource('/send_message');
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.text === '[DONE]') {
+                eventSource.close();
+            } else {
+                document.getElementById('response').innerText += data.text;
+            }
+        };
+        eventSource.onerror = function() {
+            document.getElementById('response').innerText += 'Error: Connection lost\n';
+            eventSource.close();
+        };
+    </script>
+</body>
+</html>

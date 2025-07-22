@@ -21,19 +21,23 @@ db.meditation_data.drop()
 db.mood_data.drop()
 db.ratings.drop()
 
+# JSON storage directory
+JSON_DIR = "instance/user_data_json"
+
 # Migrate users.json
-with open("instance/users.json", "r") as file:
-    users = json.load(file)
-    for user in users:
-        db.users.insert_one(user)
+users_file = os.path.join(JSON_DIR, "users.json")
+if os.path.exists(users_file):
+    with open(users_file, "r") as file:
+        users = json.load(file)
+        for user in users:
+            db.users.insert_one(user)
 
 # Migrate user_data
-for filename in os.listdir("instance/user_data"):
-    if filename.endswith(".json"):
-        username = filename[:-5]
-        with open(f"instance/user_data/{filename}", "r") as file:
+for filename in os.listdir(JSON_DIR):
+    if filename.endswith("_user_data.json"):
+        username = filename[:-12]
+        with open(os.path.join(JSON_DIR, filename), "r") as file:
             user_data = json.load(file)
-            user_data["username"] = username
             db.user_data.insert_one(user_data)
 
 # Migrate appointments
@@ -64,41 +68,32 @@ for filename in os.listdir("instance/doctor_appointments"):
                 db.doctor_appointments.insert_one(appointment)
 
 # Migrate questionnaire responses
-for folder in ['close_ended', 'open_ended']:
-    folder_path = f"responses/{folder}"
+for folder in ['closed_ended', 'open_ended']:
+    folder_path = os.path.join(JSON_DIR, folder)
     if os.path.exists(folder_path):
         for filename in os.listdir(folder_path):
-            if filename.endswith(".csv"):
-                username = filename[:-4]
-                with open(f"{folder_path}/{filename}", "r") as file:
-                    reader = csv.DictReader(file)
-                    responses = [{"question": row["Question"], "answer": row.get("Answer") or row.get("Response")} for row in reader]
-                    document = {
-                        "username": username,
-                        "type": folder,
-                        "responses": responses,
-                        "timestamp": datetime.now().isoformat()
-                    }
-                    db.questionnaire_responses.insert_one(document)
+            if filename.endswith(".json"):
+                username = filename.split('_')[0]
+                with open(os.path.join(folder_path, filename), "r") as file:
+                    responses = json.load(file)
+                    db.questionnaire_responses.insert_one(responses)
 
 # Migrate meditation_data
-for filename in os.listdir("instance/meditation_data"):
-    if filename.endswith("_meditation.json"):
-        username = filename.split("_")[0]
-        with open(f"instance/meditation_data/{filename}", "r") as file:
+for filename in os.listdir(JSON_DIR):
+    if filename.endswith("_meditation_log.json"):
+        username = filename.split('_')[0]
+        with open(os.path.join(JSON_DIR, filename), "r") as file:
             meditation_history = json.load(file)
             for session in meditation_history:
-                session["username"] = username
                 db.meditation_data.insert_one(session)
 
 # Migrate mood_data
-for filename in os.listdir("instance/mood_data"):
+for filename in os.listdir(JSON_DIR):
     if filename.endswith("_moods.json"):
-        username = filename[:-11]
-        with open(f"instance/mood_data/{filename}", "r") as file:
+        username = filename.split('_')[0]
+        with open(os.path.join(JSON_DIR, filename), "r") as file:
             moods = json.load(file)
             for mood in moods:
-                mood["username"] = username
                 db.mood_data.insert_one(mood)
 
 # Migrate ratings
@@ -109,4 +104,4 @@ if os.path.exists(ratings_file):
         for rating in ratings_data["ratings"]:
             db.ratings.insert_one(rating)
 
-print("Migration completed successfully!")
+print("Migration completed successfully at 11:35 AM IST, July 18, 2025!")

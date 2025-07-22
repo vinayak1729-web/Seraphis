@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - Seraphis AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+</head>
+<body>
+    <h1>Test Page</h1>
+    <p>Welcome to the test page for Seraphis AI. This is a placeholder to verify routing and templating.</p>
+    <a href="{{ url_for('ai.chat') }}">Go to Chat</a>
+    <br><br>
+    <form method="POST" action="{{ url_for('ai.chat') }}">
+        <textarea name="message" rows="4" cols="50" placeholder="Enter a test message"></textarea>
+        <br>
+        <button type="submit">Send Test Message</button>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+            const responseDiv = document.getElementById('response');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const message = form.querySelector('textarea[name="message"]').value;
+                responseDiv.textContent = 'Loading...';
+
+                try {
+                    const res = await fetch('{{ url_for("ai.chat") }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message })
+                    });
+                    if (!res.ok) throw new Error('Failed to send');
+                    const text = await res.text();
+                    responseDiv.textContent = `Response: ${text}`;
+                } catch (error) {
+                    responseDiv.textContent = `Error: ${error.message}`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

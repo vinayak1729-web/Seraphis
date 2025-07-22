@@ -1,69 +1,72 @@
-from flask import Blueprint, render_template, request, jsonify, Response, session, redirect
-from app.services.ai_service import gemini_chat, analyze_image, detect_emotion_and_attention
-from app.utils.decorators import login_required
-import cv2
+from flask import Blueprint, render_template, request, jsonify, url_for, session, Response
+import ollama
+import json
+import base64
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 ai_bp = Blueprint('ai', __name__)
 
-attention_status = "Not Paying Attention"
-dominant_emotion = "neutral"
-
+# Route for Seraphis AI chat
 @ai_bp.route('/chat', methods=['GET', 'POST'])
 def chat():
-    if request.method == 'GET':
-        return render_template('chat.html')
-    elif request.method == 'POST':
-        try:
-            data = request.get_json()
-            user_input = data.get('message')
-            response = gemini_chat(user_input)
-            return jsonify({'response': response})
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
-
-@ai_bp.route('/image_analysis', methods=['GET', 'POST'])
-def image_analysis():
-    analysis = None
     if request.method == 'POST':
-        if 'file' not in request.files:
-            return redirect(request.url)
+        message = request.json.get('message')
+        if not message:
+            return jsonify({'error': 'No message provided'}), 400
+        # Placeholder for Seraphis AI logic
+        response = "Seraphis response: " + message
+        return jsonify({'response': response})
+    return render_template('chat.html', chat_mode='seraphis', endpoint=url_for('ai.chat'))
 
-        uploaded_file = request.files['file']
-        if uploaded_file.filename == '':
-            return redirect(request.url)
-
-        if uploaded_file:
-            image_data = uploaded_file.read()
-            analysis = analyze_image(image_data)
-    return render_template('image_analysis.html', analysis=analysis)
+@ai_bp.route('/chat/gemma3n', methods=['GET', 'POST'])
+def gemma3n_chat():
+    if request.method == 'POST':
+        if "username" not in session:
+            return Response("data: {'text': 'Please log in'}\n\n", content_type='text/event-stream')
+        
+        if 'message' not in request.form:
+            return Response("data: {'text': 'Error: No message provided'}\n\n", content_type='text/event-stream')
+        
+        user_message = request.form['message']
+        files = request.files.getlist('files')
+        
+        messages = [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": user_message}
+        ]
+        
+        if files:
+            images = [file.read() for file in files if file]
+            messages[1]["images"] = images
+        
+        def generate():
+            try:
+                stream = ollama.chat(
+                    model="gemma3n:e2b",
+                    messages=messages,
+                    stream=True
+                )
+                for chunk in stream:
+                    content = chunk['message']['content']
+                    yield f"data: {json.dumps({'text': content})}\n\n"
+            except Exception as e:
+                yield f"data: {json.dumps({'text': f'Error: {str(e)}'})}\n\n"
+            yield "data: [DONE]\n\n"
+        
+        return Response(generate(), content_type='text/event-stream')
+    
+    return render_template('consultant.html', chat_mode='gemma3n', endpoint=url_for('ai.gemma3n_chat'))
+@ai_bp.route('/test', methods=['GET', 'POST'])
+def test():
+    return render_template('testt.html')
 
 @ai_bp.route('/talk_to_me', methods=['GET', 'POST'])
 def talk_to_me():
-    global attention_status, dominant_emotion
+    return render_template('talk_to_me.html')
 
-    if request.method == 'GET':
-        return render_template('talk_to_me.html')
-
-    elif request.method == 'POST':
-        user_input = request.form.get('user_input', '')
-        prompt = f"The user is in a {dominant_emotion} mood and is {'paying attention' if attention_status == 'Paying Attention' else 'not paying attention'}."
-        bot_response = gemini_chat(user_input + " " + prompt)
-        return jsonify({'response': bot_response})
-
-    return "Unsupported request method", 405
-
-# @ai_bp.route('/video_feed')
-# def video_feed():
-#     def generate_frames():
-#         cap = cv2.VideoCapture(0)
-#         global attention_status, dominant_emotion
-#         while True:
-#             success, frame = cap.read()
-#             if not success:
-#                 break
-#             processed_frame, attention_status, dominant_emotion = detect_emotion_and_attention(frame, attention_status, dominant_emotion)
-#             _, buffer = cv2.imencode('.jpg', processed_frame)
-#             frame = buffer.tobytes()
-#             yield (b'--frame\r\n'
-#                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-#         cap.release()
-#     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+@ai_bp.route('/image_analysis', methods=['GET', 'POST'])
+def image_analysis():
+    return render_template('image_analysis.html')
