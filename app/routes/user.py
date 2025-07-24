@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
 from app.services.user_service import save_user_data, get_user_data, save_questionnaire_responses, get_questionnaire_responses, save_meditation_log, get_meditation_stats, save_mood, get_moods
-from app.services.ai_service import gemini_chat
+from app.services.ai_service import chat
 from app.utils.decorators import login_required
 from datetime import datetime
 import numpy as np
@@ -81,6 +81,7 @@ def update_personal_info():
     }
     save_user_data(session['email'], updated_data)
     return redirect(url_for('user.personal_info'))
+
 
 # List of questions
 questions = [
@@ -416,7 +417,7 @@ def thank_you():
         elif response['type'] == "open_ended":
             open_ended_str = " ".join([f"{r['question']}: {r['answer']}" for r in response['responses']])
 
-    judge_gemini = gemini_chat(f"This is my assessment of close-ended questions and open-ended questions. Please provide feedback on me in friendly tone in summary like a professional psychiatrist. in english {close_ended_str} {open_ended_str}")
+    judge_gemini = chat(f"This is my assessment of close-ended questions and open-ended questions. Please provide feedback on me in friendly tone in summary like a professional psychiatrist. {close_ended_str} {open_ended_str}")
     return render_template('thank_you.html', judge_gemini=judge_gemini, user_name=username, completejudege=judge_gemini)
 
 @user_bp.route('/feedback')
@@ -437,7 +438,7 @@ def feedback():
                 open_ended_str = " ".join([f"{r['question']}: {r['answer']}" for r in response['responses']])
 
         default = "This is my assessment of close-ended questions and open-ended questions. Please provide feedback on me in friendly tone in summary like a professional psychiatrist."
-        judge_gemini = gemini_chat(default + " " + close_ended_str + " " + open_ended_str)
+        judge_gemini = chat(default + " " + close_ended_str + " " + open_ended_str)
         user_data['wellness_report'] = judge_gemini
         save_user_data(session['email'], user_data)
     else:

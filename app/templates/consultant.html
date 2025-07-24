@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if chat_mode == 'gemma3n' %}Gemma 3n AI{% else %}Seraphis AI{% endif %} - Your Divine Healing Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <style>
+        .navbar { padding: 1rem; }
+        .nav-links, .auth-buttons { display: flex; gap: 1rem; }
+        .chat-container { max-width: 800px; margin: 0 auto; padding: 1rem; }
+        .chat-messages { max-height: 400px; overflow-y: auto; }
+        @media (max-width: 600px) {
+            .nav-links, .auth-buttons { flex-direction: column; align-items: center; }
+            .chat-input-wrapper { flex-direction: column; }
+            .input-actions { margin-top: 0.5rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-container">
+                <a href="{{ url_for('user.home') }}" class="logo">SERAPHIS</a>
+            </div>
+            <ul class="nav-links">
+                <li><a class="nav-link" href="{{ url_for('ai.chat') }}">Seraphis Consultation</a></li>
+                <li><a class="nav-link" href="{{ url_for('ai.gemma3n_chat') }}">Gemma 3n Consultation</a></li>
+                <li><a class="nav-link" href="{{ url_for('ai.talk_to_me') }}">Voice Support</a></li>
+                <li><a class="nav-link" href="{{ url_for('ai.image_analysis') }}">Analysis</a></li>
+                <li><a class="nav-link" href="{{ url_for('user.close_ended') }}">Wellness</a></li>
+                <li><a class="nav-link" href="{{ url_for('user.personal_info') }}">Profile</a></li>
+            </ul>
+            <div class="auth-buttons">
+                {% if session.username %}
+                <span class="welcome-text">Welcome, {{ session.username }}</span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-glass">Sign Out</a>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-glass"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Get Started</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <br><br><br><br><br>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="bot-avatar">✨</div>
+            <div class="bot-info">
+                <h2>{% if chat_mode == 'gemma3n' %}Gemma 3n AI{% else %}Seraphis AI{% endif %}</h2>
+                <div class="bot-status">
+                    <div class="status-dot"></div>
+                    <span>Online • Ready to heal</span>
+                </div>
+            </div>
+            <div class="mood-indicator" id="moodIndicator">
+                <span id="moodText">Mood: Calm</span>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message">
+                <h3>✨ Welcome to Divine Healing</h3>
+                <p>I'm {% if chat_mode == 'gemma3n' %}Gemma 3n AI{% else %}Seraphis AI{% endif %}, your compassionate healing companion. I'm here to listen, understand, and guide you on your journey to mental wellness. How are you feeling today?</p>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator" style="display: none;">
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+            <div class="ai-thinking">
+                <i class="fas fa-brain thinking-icon"></i>
+                <span>{% if chat_mode == 'gemma3n' %}Gemma 3n{% else %}Seraphis{% endif %} is thinking...</span>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="quick-suggestions" id="quickSuggestions">
+                <div class="suggestion-chip" data-text="I'm feeling anxious today">I'm feeling anxious today</div>
+                <div class="suggestion-chip" data-text="Help me with breathing exercises">Help me with breathing exercises</div>
+                <div class="suggestion-chip" data-text="I need someone to talk to">I need someone to talk to</div>
+                <div class="suggestion-chip" data-text="I'm having trouble sleeping">I'm having trouble sleeping</div>
+            </div>
+            <form id="chat-form" enctype="multipart/form-data" method="POST" action="{{ endpoint }}">
+                <div class="chat-input-wrapper">
+                    <textarea class="chat-input" id="chatInput" name="message" placeholder="Share your thoughts with {% if chat_mode == 'gemma3n' %}Gemma 3n{% else %}Seraphis{% endif %}..." rows="1"></textarea>
+                    <input type="file" id="fileInput" name="files" multiple style="display:none;">
+                    <div class="input-actions">
+                        <button type="button" class="voice-button" id="voiceButton" title="Voice input">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button type="submit" class="send-button" id="sendButton" title="Send message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            const typingIndicator = document.getElementById('typingIndicator');
+            const quickSuggestions = document.getElementById('quickSuggestions');
+            const fileInput = document.getElementById('fileInput');
+
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+                const messageContent = document.createElement('div');
+                messageContent.className = 'message-content';
+                messageContent.textContent = message;
+                const messageTime = document.createElement('div');
+                messageTime.className = 'message-time';
+                messageTime.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                messageDiv.appendChild(messageContent);
+                messageDiv.appendChild(messageTime);
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            async function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) {
+                    addMessage('Please enter a message.', false);
+                    return;
+                }
+
+                addMessage(message, true);
+                chatInput.value = '';
+                chatInput.style.height = 'auto';
+                quickSuggestions.style.display = 'none';
+
+                typingIndicator.style.display = 'block';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                const formData = new FormData(document.getElementById('chat-form'));
+                try {
+                    const response = await fetch('{{ endpoint }}', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    if (response.headers.get('content-type').includes('text/event-stream')) {
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder();
+                        let fullResponse = '';
+
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) {
+                                console.log('Stream ended');
+                                break;
+                            }
+                            const chunk = decoder.decode(value, { stream: true });
+                            console.log('Received chunk:', chunk); // Debug: Log each chunk
+                            if (chunk.includes('[DONE]')) {
+                                console.log('Stream completed with [DONE]');
+                                break;
+                            }
+                            if (chunk.startsWith('data: ')) {
+                                const dataStr = chunk.replace('data: ', '').trim();
+                                if (dataStr) {
+                                    try {
+                                        const data = JSON.parse(dataStr);
+                                        if (data.text) {
+                                            fullResponse += data.text;
+                                            const botMessages = chatMessages.getElementsByClassName('message bot');
+                                            if (botMessages.length > 0) {
+                                                botMessages[botMessages.length - 1].querySelector('.message-content').textContent = fullResponse;
+                                            } else {
+                                                addMessage(fullResponse, false);
+                                            }
+                                        }
+                                    } catch (parseError) {
+                                        console.error('Parse error:', parseError, 'on chunk:', dataStr);
+                                        addMessage('Error parsing response.', false);
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        const text = await response.text();
+                        console.log('Non-stream response:', text); // Debug: Log non-stream response
+                        addMessage(text, false);
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                    addMessage(`Error: ${error.message}. Please try again or log in if needed.`, false);
+                    if (error.message.includes('401') || error.message.includes('403')) {
+                        window.location.href = '{{ url_for("auth.login") }}';
+                    }
+                } finally {
+                    typingIndicator.style.display = 'none';
+                }
+            }
+
+            sendButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                sendMessage();
+            });
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            chatInput.addEventListener('input', () => {
+                chatInput.style.height = 'auto';
+                chatInput.style.height = chatInput.scrollHeight + 'px';
+            });
+
+            quickSuggestions.addEventListener('click', (e) => {
+                if (e.target.classList.contains('suggestion-chip')) {
+                    chatInput.value = e.target.dataset.text;
+                    sendMessage();
+                }
+            });
+
+            voiceButton.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    addMessage(`Attached ${fileInput.files.length} file(s).`, true);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
